@@ -1,0 +1,5 @@
+---
+# vars file for fritzing
+
+fritzing_install_directory:
+  "/usr/share"
