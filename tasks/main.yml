@@ -1,7 +1,5 @@
 ---
 # tasks file for fritzing
-- debug:
-    msg: "role path is {{role_path}}"
 
 - name: Get download webpage
   delegate_to: localhost
@@ -17,74 +15,64 @@
   run_once: True  
   set_fact:
     latest_file: "{{ lookup('file', '/tmp/fritzingDownloadPage') | regex_search('/download/.*/linux-64bit/fritzing-.*bz2') }}"
-
-- name: Get stat of download directory
-  delegate_to: localhost
-  run_once: True
-  stat:
-    path: "{{role_path}}/downloads"
-  register: downloads_dir_stat
-
 - name: Create download dir
   delegate_to: localhost
   run_once: True
-  when: downloads_dir_stat.stat.exists == False
   file:
-    path: "{{role_path}}/downloads"
+    path: "{{ role_path }}/downloads"
     state: directory
 
 - name: Get stat of local file
   delegate_to: localhost
   run_once: True
   stat:
-    path: "{{role_path}}/downloads/{{latest_file | basename}}"
+    path: "{{ role_path }}/downloads/{{ latest_file | basename }}"
   register: local_archive_stat
 
 - name: Get download archive file from server
   delegate_to: localhost
   run_once: True
-  when: local_archive_stat.stat.exists == False
+  when: not local_archive_stat.stat.exists
   get_url:
-    url: "https://fritzing.org{{latest_file}}"
+    url: "https://fritzing.org{{ latest_file }}"
     http_agent: "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0"
-    dest: "{{role_path}}/downloads/"
+    dest: "{{ role_path }}/downloads/"
 
 - name: Get Version Number
   delegate_to: localhost
   run_once: True
   set_fact:
-    latest_version: "{{(latest_file | basename | regex_findall('fritzing-(.*).linux'))[0]}}"
+    latest_version: "{{ ( latest_file | basename | regex_findall('fritzing-(.*).linux') )[0] }}"
 
 - name: Get stat version file
   stat:
-    path: "{{fritzing_install_directory}}/fritzing/ansible_install_{{latest_version}}"
+    path: "{{ fritzing_install_directory }}/fritzing/ansible_install_{{ latest_version }}"
   register: version_stat
 
-
 - name: Remove fritzing dir if already exists
-  when: version_stat.stat.exists == False
+  when: not version_stat.stat.exists
   become: yes
   become_user: 'root'
   file:
-    path: "{{fritzing_install_directory}}/fritzing"
+    path: "{{ fritzing_install_directory }}/fritzing"
     state: absent
 
 - name: Upload archive to target and extract
-  when: version_stat.stat.exists == False
+  when: not version_stat.stat.exists
   become: yes
   become_user: 'root'
   unarchive:
-    src: "{{role_path}}/downloads/{{latest_file | basename}}"
-    dest: "{{fritzing_install_directory}}"
+    src: "{{ role_path }}/downloads/{{ latest_file | basename }}"
+    dest: "{{ fritzing_install_directory }}"
 
 - name: Move directory
-  when: version_stat.stat.exists == False
+  when: not version_stat.stat.exists
   become: yes
   become_user: 'root'
-  shell: "cd {{fritzing_install_directory}}; mv {{(latest_file | basename | regex_findall('(.*)[.]tar[.]bz2'))[0]}} fritzing"
+  shell: "cd {{ fritzing_install_directory }}; mv {{ ( latest_file | basename | regex_findall('(.*)[.]tar[.]bz2') )[0]}} fritzing"
 
 - name: Create symlink in /usr/bin
-  when: version_stat.stat.exists == False
+  when: not version_stat.stat.exists
   become: yes
   become_user: 'root'
   file:
@@ -93,11 +81,9 @@
     state: link
 
 - name: Create version file
-  when: version_stat.stat.exists == False
+  when: not version_stat.stat.exists
   become: yes
   become_user: 'root'
   file:
     path: "{{fritzing_install_directory}}/fritzing/ansible_install_{{latest_version}}"
     state: touch
-
-
