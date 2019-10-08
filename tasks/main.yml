@@ -76,7 +76,7 @@
   become: yes
   become_user: 'root'
   file:
-    src: "{{fritzing_install_directory}}/fritzing/Fritzing"
+    src: "{{ fritzing_install_directory }}/fritzing/Fritzing"
     dest: "/usr/bin/fritzing"
     state: link
 
@@ -85,5 +85,5 @@
   become: yes
   become_user: 'root'
   file:
-    path: "{{fritzing_install_directory}}/fritzing/ansible_install_{{latest_version}}"
+    path: "{{ fritzing_install_directory }}/fritzing/ansible_install_{{ latest_version }}"
     state: touch
