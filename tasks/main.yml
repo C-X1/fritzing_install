@@ -5,7 +5,6 @@
 
 - name: Get download webpage
   delegate_to: localhost
-  when: False #TODO REMOVE
   run_once: True
   get_url:
     url: 'https://fritzing.org/download/'
