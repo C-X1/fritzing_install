@@ -19,7 +19,6 @@ Role Variables
 | Variable                       | Description                                  | Default    |
 | ------------------------------ | -------------------------------------------  | ---------- |
 | fritzing_install_directory     | directory the fritzing folder will be placed | /usr/share |
-|                                |                                              |            |
 
 Dependencies
 ---------------
