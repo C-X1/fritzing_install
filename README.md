@@ -16,9 +16,10 @@ TODO: Probably Kubuntu, Ubuntu, Debian ...
 Role Variables
 ------------------
 
-| Variable                       | Description                                 | Default    |
-| ------------------------------ | ------------------------------------------- | ---------- |
-| fritzing_install_directory     | directory the fritzing folder will be place | /usr/share |
+| Variable                       | Description                                  | Default    |
+| ------------------------------ | -------------------------------------------  | ---------- |
+| fritzing_install_directory     | directory the fritzing folder will be placed | /usr/share |
+|                                |                                              |            |
 
 Dependencies
 ---------------
