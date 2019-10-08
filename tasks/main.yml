@@ -1,6 +1,3 @@
----
-# tasks file for fritzing
-
 - name: Get download webpage
   delegate_to: localhost
   run_once: True
@@ -69,7 +66,7 @@
   when: not version_stat.stat.exists
   become: yes
   become_user: 'root'
-  shell: "cd {{ fritzing_install_directory }}; mv {{ ( latest_file | basename | regex_findall('(.*)[.]tar[.]bz2') )[0]}} fritzing"
+  shell: "cd {{ fritzing_install_directory }}; mv {{ ( latest_file | basename | regex_findall('(.*)[.]tar[.]bz2') )[0] }} fritzing"
 
 - name: Create symlink in /usr/bin
   when: not version_stat.stat.exists

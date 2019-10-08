@@ -10,10 +10,6 @@ galaxy_info:
     versions:
       - all
 
-  - name: Kubuntu
-    versions:
-      - all
-
   - name: Debian
     versions:
       - all
